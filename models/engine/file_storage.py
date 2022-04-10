@@ -13,10 +13,7 @@ class FileStorage:
         if (not cls):
             return FileStorage.__objects
         new_return = {}
-        print(f'esto es cls: {cls} y type: {type(cls)}')
         for key, value in self.__objects.items():
-            a = type(cls)
-            b = type(self.__objects[key])
             if (cls.__name__ == value.to_dict()['__class__']):
                 new_return[key] = value
         return (new_return)
@@ -63,9 +60,10 @@ class FileStorage:
         delete obj from __objects if it’s inside
         if obj is equal to None, the method should not do anything
         """
-        try:
-            key = "{}.{}".format(obj.to_dict()['__class__'], obj.id)
-            self.__objects.pop(key)
-            self.save()
-        except Exception as Ex:
-            pass
+        if (obj):
+            try:
+                key = "{}.{}".format(obj.to_dict()['__class__'], obj.id)
+                self.__objects.pop(key)
+                self.save()
+            except Exception as Ex:
+                pass
