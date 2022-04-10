@@ -132,9 +132,6 @@ class HBNBCommand(cmd.Cmd):
             data = arg.split('=')
             key = data[0]
             value = data[1]
-            aux_value = value.strip('"')
-            aux_value = aux_value.replace('.', '', 1)
-            aux_value = aux_value.strip('-')
 
             # check for String
             if value[0] == '"' and value[-1] == '"':
@@ -142,15 +139,14 @@ class HBNBCommand(cmd.Cmd):
                 setattr(new_obj, key, str(value.replace('"', '_\"')))
                 # print(f'{value} is a String')
                 # attr_dict[key] = value.strip('"').replace('_', ' ')
-            elif aux_value.isdigit():
-                if '.' in value:
-                    # print(f'{value} is a Float')
-                    # attr_dict[key] = float(value)
-                    setattr(new_obj, key, float(value))
-                else:
-                    # print(f'{value} is an Integer')
-                    # attr_dict[key] = int(value)
-                    setattr(new_obj, key, int(value))
+            elif '.' in value:
+                # print(f'{value} is a Float')
+                # attr_dict[key] = float(value)
+                setattr(new_obj, key, float(value))
+            else:
+                # print(f'{value} is an Integer')
+                # attr_dict[key] = int(value)
+                setattr(new_obj, key, int(value))
         print(new_obj.id)
 #        print('***************************************')
 #        print(f'dictionary\n{attr_dict}\n************************************')
