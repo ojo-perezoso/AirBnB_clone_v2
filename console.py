@@ -124,6 +124,7 @@ class HBNBCommand(cmd.Cmd):
         arg_list = args.split()
 
         new_obj = self.classes[arg_list[0]]()
+        print(new_obj.id)
 
         for arg in arg_list[1:]:
             data = arg.split('=')
@@ -133,21 +134,14 @@ class HBNBCommand(cmd.Cmd):
             # check for String
             if value[0] == '"':
                 value = value.strip('"').replace('_', ' ')
-                setattr(new_obj, key, str(value.replace('"', '\\\"')))
-                # print(f'{value} is a String')
-                # attr_dict[key] = value.strip('"').replace('_', ' ')
+                value = str(value)
             elif '.' in value:
-                # print(f'{value} is a Float')
-                # attr_dict[key] = float(value)
-                setattr(new_obj, key, float(value))
+                value = float(value)
             else:
-                # print(f'{value} is an Integer')
-                # attr_dict[key] = int(value)
-                setattr(new_obj, key, int(value))
-        print(new_obj.id)
-#        print('***************************************')
-#        print(f'dictionary\n{attr_dict}\n************************************')
+                value = int(value)
 
+        setattr(new_obj, key, value)
+        new_obj.save()
     """
         new_instance = HBNBCommand.classes[args]()
         storage.save()
