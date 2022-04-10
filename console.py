@@ -142,6 +142,7 @@ class HBNBCommand(cmd.Cmd):
 
             setattr(new_obj, key, value)
         storage.save()
+        return (new_obj.id)
     """
         new_instance = HBNBCommand.classes[args]()
         storage.save()

@@ -2,6 +2,7 @@
 """ Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
+from console import HBNBCommand
 from models import storage
 import os
 
@@ -26,6 +27,7 @@ class test_fileStorage(unittest.TestCase):
 
     def test_obj_list_empty(self):
         """ __objects is initially empty """
+        HBNBCommand
         self.assertEqual(len(storage.all()), 0)
 
     def test_new(self):
@@ -45,6 +47,17 @@ class test_fileStorage(unittest.TestCase):
         """ File is not created on BaseModel save """
         new = BaseModel()
         self.assertFalse(os.path.exists('file.json'))
+
+    def test_model_creation_args(self):
+        """ Test for model creation with args"""
+        console = HBNBCommand()
+        cmd = f'BaseModel name="Robert" age=92 height=55.6'
+        s_id = console.do_create(cmd)
+        obj = storage._FileStorage__objects[f'BaseModel.{s_id}']
+        
+        self.assertEqual(type(obj.name), str)
+        self.assertEqual(type(obj.age), int)
+        self.assertEqual(type(obj.height), float)
 
     def test_empty(self):
         """ Data is saved to file """
