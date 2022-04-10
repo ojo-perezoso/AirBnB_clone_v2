@@ -123,9 +123,6 @@ class HBNBCommand(cmd.Cmd):
 
         arg_list = args.split()
 
-        if arg_list[0] not in self.classes.keys():
-            return
-
         new_obj = self.classes[arg_list[0]]()
 
         for arg in arg_list[1:]:
@@ -134,9 +131,9 @@ class HBNBCommand(cmd.Cmd):
             value = data[1]
 
             # check for String
-            if value[0] == '"' and value[-1] == '"':
+            if value[0] == '"':
                 value = value.strip('"').replace('_', ' ')
-                setattr(new_obj, key, str(value.replace('"', '_\"')))
+                setattr(new_obj, key, str(value.replace('"', '\"')))
                 # print(f'{value} is a String')
                 # attr_dict[key] = value.strip('"').replace('_', ' ')
             elif '.' in value:
