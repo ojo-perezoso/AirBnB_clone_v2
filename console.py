@@ -133,7 +133,7 @@ class HBNBCommand(cmd.Cmd):
             # check for String
             if value[0] == '"':
                 value = value.strip('"').replace('_', ' ')
-                setattr(new_obj, key, str(value.replace('"', '\"')))
+                setattr(new_obj, key, str(value.replace('"', '\\\"')))
                 # print(f'{value} is a String')
                 # attr_dict[key] = value.strip('"').replace('_', ' ')
             elif '.' in value:
