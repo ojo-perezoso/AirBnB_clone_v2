@@ -121,9 +121,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
             return
 
-        arg_list = args.split()[1:]
-        attr_dict = {}
-        for arg in arg_list:
+        arg_list = args.split()
+
+        if arg_list[0] not in self.classes.keys():
+            print("** class name doesn't exists **")
+            return
+
+        new_obj = self.classes[arg_list[0]]()
+
+        for arg in arg_list[1:]:
             data = arg.split('=')
             key = data[0]
             value = data[1]
@@ -132,20 +138,23 @@ class HBNBCommand(cmd.Cmd):
             aux_value = aux_value.strip('-')
 
             # check for String
-            print(f'aux_value: {aux_value}')
             if value[0] == '"' and value[-1] == '"':
-                print(f'{value} is a String')
-                attr_dict[key] = value.strip('"').replace('_', ' ')
+                value = value.strip('"').replace('_', ' ')
+                setattr(new_obj, key, value.replace('"', '_\"'))
+                # print(f'{value} is a String')
+                # attr_dict[key] = value.strip('"').replace('_', ' ')
             elif aux_value.isdigit():
                 if '.' in value:
-                    print(f'{value} is a Float')
-                    attr_dict[key] = float(value)
+                    # print(f'{value} is a Float')
+                    # attr_dict[key] = float(value)
+                    setattr(new_obj, key, float(value))
                 else:
-                    print(f'{value} is an Integer')
-                    attr_dict[key] = int(value)
+                    # print(f'{value} is an Integer')
+                    # attr_dict[key] = int(value)
+                    setattr(new_obj, key, int(value))
 
-        print('***************************************')
-        print(f'dictionary\n{attr_dict}\n************************************')
+#        print('***************************************')
+#        print(f'dictionary\n{attr_dict}\n************************************')
 
     """
         new_instance = HBNBCommand.classes[args]()
