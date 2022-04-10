@@ -124,7 +124,6 @@ class HBNBCommand(cmd.Cmd):
         arg_list = args.split()
 
         if arg_list[0] not in self.classes.keys():
-            print("** class name doesn't exists **")
             return
 
         new_obj = self.classes[arg_list[0]]()
