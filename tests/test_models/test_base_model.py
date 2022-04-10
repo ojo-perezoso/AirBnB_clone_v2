@@ -84,6 +84,7 @@ class test_basemodel(unittest.TestCase):
         """ """
         new = self.value()
         self.assertEqual(type(new.id), str)
+        self.assertNotEqual(new.id, None)
 
     def test_created_at(self):
         """ """

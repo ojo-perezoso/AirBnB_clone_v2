@@ -66,6 +66,8 @@ class HBNBCommand(cmd.Cmd):
 
                 # isolate _id, stripping quotes
                 _id = pline[0].replace('\"', '')
+                if not _id:
+                    raise ValueError('missing argument: id')
                 # possible bug here:
                 # empty quotes register as empty _id when replaced
 
@@ -73,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -118,14 +120,39 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
+
+        arg_list = args.split()[1:]
+        attr_dict = {}
+        for arg in arg_list:
+            data = arg.split('=')
+            key = data[0]
+            value = data[1]
+            aux_value = value.strip('"')
+            aux_value = aux_value.replace('.', '', 1)
+            aux_value = aux_value.strip('-')
+
+            # check for String
+            print(f'aux_value: {aux_value}')
+            if value[0] == '"' and value[-1] == '"':
+                print(f'{value} is a String')
+                attr_dict[key] = value.strip('"').replace('_', ' ')
+            elif aux_value.isdigit():
+                if '.' in value:
+                    print(f'{value} is a Float')
+                    attr_dict[key] = float(value)
+                else:
+                    print(f'{value} is an Integer')
+                    attr_dict[key] = int(value)
+
+        print('***************************************')
+        print(f'dictionary\n{attr_dict}\n************************************')
+
+    """
         new_instance = HBNBCommand.classes[args]()
         storage.save()
         print(new_instance.id)
         storage.save()
-
+    """
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
@@ -272,7 +299,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +307,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -319,6 +346,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
