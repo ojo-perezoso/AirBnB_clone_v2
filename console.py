@@ -140,7 +140,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 value = int(value)
 
-        setattr(new_obj, key, value)
+            setattr(new_obj, key, value)
         storage.save()
     """
         new_instance = HBNBCommand.classes[args]()
