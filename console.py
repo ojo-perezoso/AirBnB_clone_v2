@@ -147,10 +147,10 @@ class HBNBCommand(cmd.Cmd):
                     # print(f'{value} is a Float')
                     # attr_dict[key] = float(value)
                     setattr(new_obj, key, float(value))
-                else:
-                    # print(f'{value} is an Integer')
-                    # attr_dict[key] = int(value)
-                    setattr(new_obj, key, int(value))
+            else:
+                # print(f'{value} is an Integer')
+                # attr_dict[key] = int(value)
+                setattr(new_obj, key, int(value))
         print(new_obj.id)
 #        print('***************************************')
 #        print(f'dictionary\n{attr_dict}\n************************************')
