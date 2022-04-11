@@ -2,6 +2,8 @@
 """ Module for testing file storage"""
 import unittest
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
+from models.state import State
 from console import HBNBCommand
 from models import storage
 import os
@@ -22,7 +24,7 @@ class test_fileStorage(unittest.TestCase):
         """ Remove storage file at end of tests """
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_obj_list_empty(self):
@@ -54,7 +56,7 @@ class test_fileStorage(unittest.TestCase):
         cmd = f'BaseModel name="Robert" age=92 height=55.6'
         s_id = console.do_create(cmd)
         obj = storage._FileStorage__objects[f'BaseModel.{s_id}']
-        
+
         self.assertEqual(type(obj.name), str)
         self.assertEqual(type(obj.age), int)
         self.assertEqual(type(obj.height), float)
@@ -120,3 +122,16 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+    def test_delete(self):
+        fs = FileStorage()
+        new = State()
+        new.name = "Montevideo"
+        fs.new(new)
+        fs.save()
+        all_states = fs.all(State)
+        previousLength = len(all_states.keys())
+        fs.delete(new)
+        all_states = fs.all(State)
+        currentLength = len(all_states.keys())
+        self.assertEqual(previousLength - 1, currentLength)
