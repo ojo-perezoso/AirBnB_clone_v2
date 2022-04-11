@@ -1,16 +1,34 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
-import json
+from os import environ as env
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 
-class FileStorage:
-    """This class manages storage of hbnb models in JSON format"""
-    __file_path = 'file.json'
-    __objects = {}
+Base = declarative_base()
+
+class DBStorage():
+    """This class manages storage of hbnb models with sqlalchemy ORM"""
+    __engine = None
+    __session= None
+
+    def __init__(self):
+        eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
+{env.get("HBNB_MYSQL_PWD")}@{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
+
+        self.__engine = create_engine(eng_creat, pool_pre_ping=True)
+
+        if env.get('HBNB_ENV') == 'test':
+            Base.metadata.drop_all()
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if (not cls):
+            res = {}
+            for t in Base.__subclasses__():
+                print(t)
+
             return FileStorage.__objects
         new_return = {}
         for key, value in self.__objects.items():
@@ -20,16 +38,12 @@ class FileStorage:
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
-
+        self.__session.add(obj)
+        print(obj.id)
+    
     def save(self):
-        """Saves storage dictionary to file"""
-        with open(FileStorage.__file_path, 'w') as f:
-            temp = {}
-            temp.update(FileStorage.__objects)
-            for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+        """Saves storage dictionary to the data base"""
+        self.__session.commit()
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -40,20 +54,22 @@ class FileStorage:
         from models.city import City
         from models.amenity import Amenity
         from models.review import Review
+    
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
                     'State': State, 'City': City, 'Amenity': Amenity,
                     'Review': Review
                   }
-        try:
-            temp = {}
-            with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
-                for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
-        except FileNotFoundError:
-            pass
+        
+        Base.metadata.create_all(self.__engine)
+
+        s_factory = sessionmaker(bind = self.__engine,
+                                     expire_on_commit = False)
+        Session = scoped_session(s_factory)
+
+        self.__session = Session()
+        self.__session.commit()
 
     def delete(self, obj=None):
         """
