@@ -15,4 +15,4 @@ class User(BaseModel, Base):
     last_name = Column(String(128), nullable=True)
     if (getenv('HBNB_ENV') == 'db'):
         places = relationship('Place', backref='user',
-                              cascade='all, delete-oprphan')
+                              cascade='all, delete-orphan')
