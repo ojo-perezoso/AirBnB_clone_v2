@@ -27,9 +27,15 @@ class FileStorage:
         with open(FileStorage.__file_path, 'w') as f:
             temp = {}
             temp.update(FileStorage.__objects)
+
             for key, val in temp.items():
-                temp[key] = val.to_dict()
-            json.dump(temp, f)
+                print(type(val.to_dict()))
+                print(val.to_dict())
+                if key != '_sa_instance_state':
+                    temp[key] = val.to_dict()
+
+            print(type(temp))
+            json.dump(dict(temp), f)
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -49,7 +55,10 @@ class FileStorage:
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
-                temp = json.load(f)
+                print('Trying to open')
+                if len(f.read()) > 0:
+                    temp = json.load(f)
+                print('did JSON loads')
                 for key, val in temp.items():
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
