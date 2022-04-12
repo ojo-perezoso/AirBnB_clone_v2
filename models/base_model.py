@@ -1,9 +1,5 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
-"""
-import uuid
-from datetime import datetime
-"""
 from uuid import uuid4
 from datetime import datetime
 from models import storage
@@ -11,6 +7,7 @@ from models import storage
 
 class BaseModel():
     """A base class for all hbnb models with ORM sqlalchemy"""
+
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:

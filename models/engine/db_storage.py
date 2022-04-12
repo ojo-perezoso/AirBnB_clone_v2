@@ -8,14 +8,16 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+
 class DBStorage():
     """This class manages storage of hbnb models with sqlalchemy ORM"""
     __engine = None
-    __session= None
+    __session = None
 
     def __init__(self):
         eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
-{env.get("HBNB_MYSQL_PWD")}@{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
+{env.get("HBNB_MYSQL_PWD")}@\
+{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
 
         self.__engine = create_engine(eng_creat, pool_pre_ping=True)
 
@@ -40,7 +42,7 @@ class DBStorage():
         """Adds new object to storage dictionary"""
         self.__session.add(obj)
         print(obj.id)
-    
+
     def save(self):
         """Saves storage dictionary to the data base"""
         self.__session.commit()
@@ -54,18 +56,17 @@ class DBStorage():
         from models.city import City
         from models.amenity import Amenity
         from models.review import Review
-    
 
         classes = {
                     'BaseModel': BaseModel, 'User': User, 'Place': Place,
                     'State': State, 'City': City, 'Amenity': Amenity,
                     'Review': Review
                   }
-        
+
         Base.metadata.create_all(self.__engine)
 
-        s_factory = sessionmaker(bind = self.__engine,
-                                     expire_on_commit = False)
+        s_factory = sessionmaker(bind=self.__engine,
+                                 expire_on_commit=False)
         Session = scoped_session(s_factory)
 
         self.__session = Session()
