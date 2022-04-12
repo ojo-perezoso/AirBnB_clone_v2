@@ -23,13 +23,18 @@ class DBStorage():
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        res = {}
         if (not cls):
-            res = {}
             for t in Base.__subclasses__():
                 objs = self.__session.query(t).all()
                 for item in objs:
                     res[f"{item.to_dict()['__class__']}.{item.id}"] = item
-            
+        else:
+            if cls in Base.__subclasses__():
+                objs.__session.query(cls).all()
+                for item in objs:
+                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+
         return res
 
 
