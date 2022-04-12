@@ -26,7 +26,14 @@ class DBStorage():
         if (not cls):
             res = {}
             for t in Base.__subclasses__():
-                print(t)
+                objs = self.__session.query(t).all()
+                for item in objs:
+                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+            
+        return res
+
+
+        """
 
             return FileStorage.__objects
         new_return = {}
@@ -34,7 +41,7 @@ class DBStorage():
             if (cls.__name__ == value.to_dict()['__class__']):
                 new_return[key] = value
         return (new_return)
-
+        """
     def new(self, obj):
         """Adds new object to storage dictionary"""
         self.__session.add(obj)
