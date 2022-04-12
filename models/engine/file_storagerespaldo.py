@@ -1,33 +1,16 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
-from os import environ as env
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from models.base_model import Base
+import json
 
-class DBStorage():
-    """This class manages storage of hbnb models with sqlalchemy ORM"""
-    __engine = None
-    __session = None
 
-    def __init__(self):
-        eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
-{env.get("HBNB_MYSQL_PWD")}@\
-{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
-
-        self.__engine = create_engine(eng_creat, pool_pre_ping=True)
-
-        if env.get('HBNB_ENV') == 'test':
-            Base.metadata.drop_all()
+class FileStorage:
+    """This class manages storage of hbnb models in JSON format"""
+    __file_path = 'file.json'
+    __objects = {}
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if (not cls):
-            res = {}
-            for t in Base.__subclasses__():
-                print(t)
-
             return FileStorage.__objects
         new_return = {}
         for key, value in self.__objects.items():
@@ -37,11 +20,22 @@ class DBStorage():
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.__session.add(obj)
+        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
-        """Saves storage dictionary to the data base"""
-        self.__session.commit()
+        """Saves storage dictionary to file"""
+        with open(FileStorage.__file_path, 'w') as f:
+            temp = {}
+            temp.update(FileStorage.__objects)
+
+            for key, val in temp.items():
+                print(type(val.to_dict()))
+                print(val.to_dict())
+                if key != '_sa_instance_state':
+                    temp[key] = val.to_dict()
+
+            print(type(temp))
+            json.dump(dict(temp), f)
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -58,12 +52,17 @@ class DBStorage():
                     'State': State, 'City': City, 'Amenity': Amenity,
                     'Review': Review
                   }
-        Base.metadata.create_all(self.__engine)
-        s_factory = sessionmaker(bind=self.__engine,
-                                 expire_on_commit=False)
-        Session = scoped_session(s_factory)
-
-        self.__session = Session()
+        try:
+            temp = {}
+            with open(FileStorage.__file_path, 'r') as f:
+                print('Trying to open')
+                if len(f.read()) > 0:
+                    temp = json.load(f)
+                print('did JSON loads')
+                for key, val in temp.items():
+                    self.all()[key] = classes[val['__class__']](**val)
+        except FileNotFoundError:
+            pass
 
     def delete(self, obj=None):
         """

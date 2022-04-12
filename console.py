@@ -10,6 +10,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from os import getenv
 
 
 class HBNBCommand(cmd.Cmd):
@@ -140,6 +141,7 @@ class HBNBCommand(cmd.Cmd):
                 value = int(value)
 
             setattr(new_obj, key, value)
+        storage.new(new_obj)
         storage.save()
         return (new_obj.id)
     """
