@@ -15,5 +15,5 @@ class City(BaseModel, Base):
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
     if env.get('HBNB_TYPE_STORAGE') == 'db':
         places = relationship('Place',
-                               backref='city',
-                               cascade='all, delete-orphan')
+                              backref='city',
+                              cascade='all, delete-orphan')

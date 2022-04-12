@@ -6,6 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import Base
 
+
 class DBStorage():
     """This class manages storage of hbnb models with sqlalchemy ORM"""
     __engine = None
@@ -37,16 +38,6 @@ class DBStorage():
 
         return res
 
-
-        """
-
-            return FileStorage.__objects
-        new_return = {}
-        for key, value in self.__objects.items():
-            if (cls.__name__ == value.to_dict()['__class__']):
-                new_return[key] = value
-        return (new_return)
-        """
     def new(self, obj):
         """Adds new object to storage dictionary"""
         self.__session.add(obj)

@@ -6,6 +6,16 @@ from sqlalchemy import Column, Integer, Float, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 
+place_amenity = Table('place_amenity',
+                      metadata=Base.metadata,
+                      Column('place_id',
+                             ForeignKey('places.id'),
+                             primary_key=True),
+                      Column('amenity_id',
+                             ForeignKey('amenities.id'),
+                             primary_key=True))
+
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
@@ -23,16 +33,26 @@ class Place(BaseModel, Base):
         reviews = relationship('Review',
                                backref='place',
                                cascade='all, delete-orphan')
-
-    @property
-    def reviews(self):
-        """getter for FileStorage"""
+        amenities = relationship('Amenity',
+                                 secondary=place_amenity)
+    else:
         from models import storage
-        
 
-        objs = []
-        for key, value in storage.all('Review').items():
-            if value.place_id == self.id:
-                objs.append(value)
-        return objs
+        @property
+        def reviews(self):
+            """getter for FileStorage"""
+            objs = []
+            for key, value in storage.all('Review').items():
+                if value.place_id == self.id:
+                    objs.append(value)
+            return objs
+
+        @property
+        def amenities(self):
+            objs = []
+            for key, value in storage.all('Amenity').items():
+                if value.place_id == self.id:
+                    objs.append(value)
+            return objs
+
     amenity_ids = []

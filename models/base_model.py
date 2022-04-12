@@ -16,6 +16,7 @@ class BaseModel():
     id = Column(String(60), nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if not kwargs:
@@ -40,7 +41,8 @@ class BaseModel():
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
-        self.updated_at = datetime.now()        
+
+        self.updated_at = datetime.now()
         storage.new(self)
         storage.save()
 
@@ -54,7 +56,7 @@ class BaseModel():
         dictionary['updated_at'] = self.updated_at.isoformat()
         try:
             del dictionary['_sa_instance_state']
-        except:
+        except Exception as ex:
             pass
         return dictionary
 
@@ -62,4 +64,4 @@ class BaseModel():
         """
         delete the current instance
         """
-        storage.delete(self) 
+        storage.delete(self)

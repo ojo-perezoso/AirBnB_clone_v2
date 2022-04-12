@@ -14,13 +14,13 @@ class State(BaseModel, Base):
         cities = relationship('City',
                               backref='state',
                               cascade="all, delete-orphan")
+
     @property
     def cities(self):
         """
         getter cities
         """
         from models import storage
-
 
         objs = []
         for key, value in storage.all('City').items():
