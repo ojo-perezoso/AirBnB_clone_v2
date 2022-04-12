@@ -23,7 +23,7 @@ class State(BaseModel, Base):
 
 
         objs = []
-        for key, value in storage.all().items():
+        for key, value in storage.all('City').items():
             key = key.split('.')
             if (key[0] == "City"):
                 if (value.state_id == self.id):
