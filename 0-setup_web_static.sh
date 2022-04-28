@@ -4,7 +4,7 @@ sudo apt update
 sudo apt install -y nginx
 
 # Nginx redirection, header and 404 page
-sudo sed -i '/^\tserver_name.*/a \\n\terror_page 404 \/custom-404.html;\n\tadd_header X-Served-By $HOSTNAME;\n\trewrite ^\/redirect_me/$ https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;\n\n\tlocation \/hbnb_static {\n\t\talias \/data\/web_static\/current\/;\n\t}\n' /etc/nginx/sites-available/default
+sudo sed -i "/^\tserver_name.*/a \\n\terror_page 404 \/custom-404.html;\n\tadd_header X-Served-By $HOSTNAME;\n\trewrite ^\/redirect_me/$ https:\/\/www.youtube.com\/watch?v=QH2-TGUlwu4 permanent;\n\n\tlocation \/hbnb_static {\n\t\talias \/data\/web_static\/current\/;\n\t}\n" /etc/nginx/sites-available/default
 
 # sudo sed -i '/^\tlocation \/ {.*}\n/a \\n\tlocation \/hbnb_static {\n\talias \/data\/web_static\/current\/\n}\n' /etc/nginx/sites-available/default
 
