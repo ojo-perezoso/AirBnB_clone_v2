@@ -37,7 +37,7 @@ class DBStorage():
                 for item in objs:
                     key = '{}.{}'.format(item.to_dict()['__class__'], item.id)
                     res[key] = item
-                    #res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+                    # res[f"{item.to_dict()['__class__']}.{item.id}"] = item
         else:
             if cls in Base.__subclasses__():
                 objs = self.__session.query(cls).all()
