@@ -29,12 +29,15 @@ class DBStorage():
             for t in Base.__subclasses__():
                 objs = self.__session.query(t).all()
                 for item in objs:
-                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+                    key = '{}.{}'.format(item.to_dict()['__class__'], item.id)
+                    res[key] = item
+                    #res[f"{item.to_dict()['__class__']}.{item.id}"] = item
         else:
             if cls in Base.__subclasses__():
                 objs = self.__session.query(cls).all()
                 for item in objs:
-                    res[f"{item.to_dict()['__class__']}.{item.id}"] = item
+                    key = '{}.{}'.format(item.to_dict()['__class__'], item.id)
+                    res[key] = item
 
         return res
 
