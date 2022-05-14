@@ -46,6 +46,10 @@ class DBStorage():
         """Saves storage dictionary to the data base"""
         self.__session.commit()
 
+    def close(self):
+        """Finishes the session in order to reload in the next request"""
+        self.__session.close()
+
     def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
