@@ -13,9 +13,15 @@ class DBStorage():
     __session = None
 
     def __init__(self):
-        eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
+        eng_creat = 'mysql+mysqldb://{}:{}@{}/{}'.format(
+            env.get("HBNB_MYSQL_USER"),
+            env.get("HBNB_MYSQL_PWD"),
+            env.get("HBNB_MYSQL_HOST"),
+            env.get("HBNB_MYSQL_DB")
+        )
+        """eng_creat = f'mysql+mysqldb://{env.get("HBNB_MYSQL_USER")}:\
 {env.get("HBNB_MYSQL_PWD")}@\
-{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'
+{env.get("HBNB_MYSQL_HOST")}/{env.get("HBNB_MYSQL_DB")}'"""
 
         self.__engine = create_engine(eng_creat, pool_pre_ping=True)
 
