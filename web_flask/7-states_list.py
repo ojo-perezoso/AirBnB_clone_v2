@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """Module for web application of AirBnB Clone"""
-import os
-import sys
+#import os
+#import sys
 from flask import Flask, render_template
 from models import storage
 
 
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+#sys.path.insert(1, os.path.join(sys.path[0], '..'))
 app = Flask(__name__)
 
 
