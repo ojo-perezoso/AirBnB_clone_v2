@@ -12,12 +12,15 @@ app = Flask(__name__)
 
 @app.teardown_appcontext
 def tear_down():
+    """Closing session"""
     storage.close()
 
 
 @app.route('/states_list', strict_slashes=False)
 def states_list():
+    """Shows a list of all the states"""
     slist = storage.all('State').values()
+    tear_down()
     return render_template('7-states_list.html', states=slist)
 
 
