@@ -33,10 +33,10 @@ class BaseModel():
                 del kwargs['__class__']
             except Exception as ex:
                 pass
-        
+
         self.__dict__.update(kwargs)
         if (os.getenv("HBNB_TYPE_STORAGE") != "db"):
-            self.save() 
+            self.save()
 
     def __str__(self):
         """Returns a string representation of the instance"""
