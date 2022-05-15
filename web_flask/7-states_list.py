@@ -10,6 +10,11 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 app = Flask(__name__)
 
 
+@app.teardown_appcontext
+def tear_down():
+    storage.close()
+
+
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     slist = storage.all('State').values()

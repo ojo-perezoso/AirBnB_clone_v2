@@ -3,7 +3,7 @@
     <UL>
 
     {% for state in states | sort(attribute='name') %}
-        <LI>{{state.name}}: <B>{{state.name}}</B></LI>
+        <LI>{{state.id}}: <B>{{state.name}}</B></LI>
     {% endfor %}
     </UL>
 {% endblock content %}
