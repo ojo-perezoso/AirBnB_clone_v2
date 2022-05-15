@@ -13,10 +13,12 @@ class City(BaseModel, Base):
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+
     if env.get('HBNB_TYPE_STORAGE') == 'db':
         places = relationship('Place',
                               backref='city',
                               cascade='all, delete-orphan')
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super().__init__(args, kwargs)
+        self.__dict__.update(kwargs)

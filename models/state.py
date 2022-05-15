@@ -16,7 +16,8 @@ class State(BaseModel, Base):
                               cascade="all, delete-orphan")
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
+        super().__init__(args, kwargs)
+        self.__dict__.update(kwargs)
 
     @property
     def cities(self):
@@ -27,7 +28,7 @@ class State(BaseModel, Base):
 
         objs = []
         for key, value in storage.all('City').items():
-            key = key.split('.')
-            if (key[0] == "City"):
-                if (value.state_id == self.id):
-                    objs.append(value)
+            if (value.state_id == self.id):
+                objs.append(value)
+
+        return objs

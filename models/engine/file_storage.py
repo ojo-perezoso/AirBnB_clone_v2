@@ -14,7 +14,8 @@ class FileStorage:
             return FileStorage.__objects
         new_return = {}
         for key, value in self.__objects.items():
-            if (cls == value.to_dict()['__class__']):
+            if (cls == value.to_dict()['__class__'] or
+                cls == type(value)):
                 new_return[key] = value
         return (new_return)
 
