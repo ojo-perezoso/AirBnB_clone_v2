@@ -39,7 +39,12 @@ class DBStorage():
                     res[key] = item
                     # res[f"{item.to_dict()['__class__']}.{item.id}"] = item
         else:
-            if cls in Base.__subclasses__():
+            if cls in Base.__subclasses__() or\
+cls in [cla.__name__ for cla in Base.__subclasses__()]:
+                if type(cls) == str:
+                    for idx, item in enumerate(Base.__subclasses__()):
+                        if cls == item.__name__:
+                            cls = Base.__subclasses__()[idx]
                 objs = self.__session.query(cls).all()
                 for item in objs:
                     key = '{}.{}'.format(item.to_dict()['__class__'], item.id)
