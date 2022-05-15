@@ -9,3 +9,6 @@ class Amenity(BaseModel, Base):
     """Ammenity of a place"""
     __tablename__ = 'amenities'
     name = Column(String(128), nullable=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()

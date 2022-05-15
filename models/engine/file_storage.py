@@ -14,12 +14,13 @@ class FileStorage:
             return FileStorage.__objects
         new_return = {}
         for key, value in self.__objects.items():
-            if (cls.__name__ == value.to_dict()['__class__']):
+            if (cls == value.to_dict()['__class__']):
                 new_return[key] = value
         return (new_return)
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
+        key = '{}.{}'.format(obj.to_dict()['__class__'], obj.id)
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):

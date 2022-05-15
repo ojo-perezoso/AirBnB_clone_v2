@@ -15,6 +15,9 @@ class State(BaseModel, Base):
                               backref='state',
                               cascade="all, delete-orphan")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+
     @property
     def cities(self):
         """

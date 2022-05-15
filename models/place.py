@@ -53,3 +53,6 @@ class Place(BaseModel, Base):
             return objs
 
     amenity_ids = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()

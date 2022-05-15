@@ -17,3 +17,6 @@ class City(BaseModel, Base):
         places = relationship('Place',
                               backref='city',
                               cascade='all, delete-orphan')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
