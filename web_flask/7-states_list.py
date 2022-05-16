@@ -2,7 +2,7 @@
 """Module for web application of AirBnB Clone"""
 from flask import Flask, render_template
 from models import storage
-
+from models.state import State
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def tear_down(exception):
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Shows a list of all the states"""
-    slist = storage.all('State').values()
+    slist = storage.all(State).values()
     return render_template('7-states_list.html', states=slist)
 
 
